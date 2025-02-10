@@ -6,24 +6,24 @@ import VerifyOtp from "./features/auth/verifyOtp";
 import ResetPassword from "./features/auth/ressetPassword";
 
 export const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <SignIn />
-    },
-    {
-        path: 'signup',
-        element: <SignUp />
-    },
-    {
-        path: 'forgot-password',
-        element: <ForgotPassword />
-    },
-    {
-        path: 'verify-otp',
-        element: <VerifyOtp />
-    },
-    {
-        path: 'reset-password',
-        element: <ResetPassword />
-    },
-])
+  {
+    path: "/",
+    element: <SignIn />,
+  },
+  {
+    path: "sign-up",
+    element: <SignUp />,
+  },
+  {
+    path: "forgot-password",
+    element: <ForgotPassword />,
+  },
+  {
+    path: "verify-otp",
+    element: <VerifyOtp />,
+  },
+  {
+    path: "reset-password",
+    element: <ResetPassword />,
+  },
+]);
