@@ -17,14 +17,6 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-//   const {
-//     data: authData,
-//     isPending: isLoadingAuth,
-//     error: authError
-//   } = useQuery({
-//     queryKey: ["auth"],
-//     queryFn: () => http.users.userControllerGetAuth()
-//   });
 
   const [accessToken, setAccessToken] = useState<string | null>(() => {
     if (typeof window !== "undefined") {

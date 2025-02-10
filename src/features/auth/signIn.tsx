@@ -5,29 +5,26 @@ import {
   Center,
   Stack,
   TextInput,
-  Title,
   PasswordInput,
   Group,
   Text,
   Paper,
-  Anchor,
   Box,
-  Flex,
-  Container,
-  Card,
-  Checkbox,
+  Title,
 } from "@mantine/core";
-import { useForm, yupResolver } from "@mantine/form";
+import { isEmail, useForm, yupResolver,} from "@mantine/form";
 import * as yup from "yup";
 
 
 import { Link } from "react-router-dom";
 import { SignInDto } from "../../types/signInDto";
 import axios from "axios";
+import { useAuth } from "../../context/authContext";
 
 
 export default function SignIn() {
 
+  const { setAccessToken } = useAuth();
   const schema = yup.object<SignInDto>({
     email: yup
       .string()
@@ -38,28 +35,16 @@ export default function SignIn() {
       .min(6, "Password must be at least 6 characters")
       .required("Password is required"),
   });
-
-  const form = useForm<SignInDto>({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validate: yupResolver(schema),
-  });
-
-
-  const handleSignIn = async () => {
-    await axios.post("http://localhost:3000/users/sign-in", form.values);
-  };
-
    const newForm = useForm({
     initialValues:{
       email:"",
       password:"",
-    }
+    },
+    validate: yupResolver(schema),
    })
    function sendForm() {
-    console.log(newForm.values)
+   const response = axios.post("http://localhost:3000/users/sign-in", newForm.values);
+   console.log(response)
    }
 
 
@@ -67,22 +52,24 @@ export default function SignIn() {
     <>
 
       <Center h="100vh" bg="#e6e9e9ff">
-        <Paper w={400} p="xl" radius="md" withBorder shadow="md"
+        <Paper w={400} p="lg" radius="md" withBorder shadow="md"
           bg={"#ae21c2"}>
-          {/* <form onSubmit={form.onSubmit(handleSignIn)}> */}
           <form onSubmit={newForm.onSubmit(sendForm)}>
             <Stack>
+              <Group justify="center">
               <Box
                 w={88}
                 h={88}
                 bg={"grape"}
                 style={{ borderRadius: "45px" }}
               ></Box>
-
-
+            </Group>
+            <Title fw={600} fz={32} ta={"center"} c={"white"}>Sign In</Title>
+            <Text fw={400} fz={21} ta={"center"} c={"white"}>Sign in If you have an account in here</Text>
               <TextInput
                 data-test="email"
-                label="Email"
+                label="Your Email"
+                c={"white"}
                 placeholder="your@email.com"
                 required
                {...newForm.getInputProps("email")}
@@ -90,7 +77,8 @@ export default function SignIn() {
 
               <PasswordInput
                 data-test="password"
-                label="Password"
+                label="Your Password"
+                c={"white"}
                 placeholder="Your password"
                 {...newForm.getInputProps("password")}
                 required
@@ -100,13 +88,14 @@ export default function SignIn() {
                 <Text
                   data-test="forgot-password-link"
                   component={Link}
-                  to="/auth/forgot-password"
+                  to="forgot-password"
                   size="sm"
-                  c="dimmed"
+                  c="white"
                 >
                   Forgot password?
                 </Text>
               </Group>
+              <Group justify="center">
                 <Button
                   w={120}
                   h={50}
@@ -117,10 +106,11 @@ export default function SignIn() {
                   fz={17}
                   type="submit"
                 >
-                  Login
+                Sign In
                 </Button>
-              <Group justify="center">
-                <Text size="sm" c="dimmed" data-test="dont-have-account">
+                </Group>
+              <Group justify="center" wrap="wrap">
+                <Text size="sm" c={"white"} data-test="dont-have-account">
                   Don&apos;t have an account?{" "}
                   <Text
                     data-test="sign-up-link"
@@ -138,72 +128,6 @@ export default function SignIn() {
           </form>
         </Paper>
       </Center>
-
-
-      {/* <Container fluid h={"100vh"} bg={"#e6e9e9ff"} p={0}>
-        <Flex h={"100%"} p={0} w={"100%"} justify={"center"} align={"center"}>
-          <Card
-            w={{
-              xs: "40%",
-              sm: "40%",
-              md: "40%",
-              lg: "35%",
-              xl: "35%",
-            }}
-            radius={20}
-            bg={"#ae21c2"}
-          >
-            <Flex justify={"center"}>
-              <Box
-                w={88}
-                h={88}
-                bg={"grape"}
-                style={{ borderRadius: "45px" }}
-              ></Box>
-            </Flex>
-            <Text fw={600} fz={30} ta={"center"} c={"#edededff"}>
-              Log In
-            </Text>
-            <Stack gap={30} mt={24}>
-              <TextInput
-                w={"100%"}
-                // leftSection={<IconUsers width={20} height={20} />}
-                placeholder="Username"
-                size="md"
-                radius={15}
-              />
-              <TextInput
-                w={"100%"}
-                // leftSection={<IconLock width={20} height={20} />}
-                placeholder="password"
-                size="md"
-                radius={15}
-              />
-              <Flex align={"center"} gap={15}>
-                <Checkbox label="Remember me" c={"white"} size="sm" />
-              </Flex>
-            </Stack>
-            <Flex justify={"center"}>
-              <Stack>
-                <Button
-                  w={120}
-                  h={50}
-                  radius={30}
-                  bg={"white"}
-                  c={"#afafb1ff"}
-                  fw={500}
-                  fz={17}
-                >
-                  Login
-                </Button>
-                <Anchor c={"#afafb1ff"} fw={500} fz={17}>
-                  Forgot Password
-                </Anchor>
-              </Stack>
-            </Flex>
-          </Card>
-        </Flex>
-      </Container> */}
     </>
 
   );

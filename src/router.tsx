@@ -1,14 +1,29 @@
 import { createBrowserRouter } from "react-router-dom";
 import SignIn from "./features/auth/signIn";
-import SignUp from "./features/auth/signup";
+import ForgotPassword from "./features/auth/forgotPassword";
+import SignUp from "./features/auth/signUp";
+import VerifyOtp from "./features/auth/verifyOtp";
+import ResetPassword from "./features/auth/ressetPassword";
 
 export const router = createBrowserRouter([
-{
-    path:'signin',
-    element:<SignIn/>
-},
-{
-path:'signup',
-element:<SignUp/>
-},
+    {
+        path: '/',
+        element: <SignIn />
+    },
+    {
+        path: 'signup',
+        element: <SignUp />
+    },
+    {
+        path: 'forgot-password',
+        element: <ForgotPassword />
+    },
+    {
+        path: 'verify-otp',
+        element: <VerifyOtp />
+    },
+    {
+        path: 'reset-password',
+        element: <ResetPassword />
+    },
 ])
