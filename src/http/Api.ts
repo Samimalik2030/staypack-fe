@@ -108,6 +108,9 @@ export interface Task {
   title: string;
   /** Detailed description of the task */
   description?: string;
+  status: "pending" | "in-progress" | "completed" | "archived";
+  priority: "low" | "medium" | "high";
+  recurrenceType: "daily" | "weekly" | "monthly" | "yearly";
   /**
    * Deadline for the task
    * @format date-time

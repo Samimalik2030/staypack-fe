@@ -15,40 +15,61 @@ import { TaskCategory, TaskPriority, TaskRecurrence } from "./types";
 import { DateTimePicker } from "@mantine/dates";
 import { useMutation } from "@tanstack/react-query";
 import http from "../../http";
-import { CreateTaskDto } from "../../http/api";
+import { CreateTaskDto, Task } from "../../http/api";
 import { notifications } from "@mantine/notifications";
-const CreateTask = () => {
+const CreateTask = ({
+  isUpdate,
+  task,
+  closeModal,
+}: {
+  isUpdate: boolean;
+  task: Task | null;
+  closeModal: () => void;
+}) => {
   const form = useForm<CreateTaskDto>({
     initialValues: {
-      title: "",
-      description: "",
-      priority: TaskPriority.HIGH,
-      notes: "",
-      isRecurring: false,
-      category: "entertainment",
+      title: task?.title || "",
+      description: task?.description || "",
+      priority: task?.priority || TaskPriority.HIGH,
+      notes: task?.notes || "",
+      isRecurring: task?.isRecurring ?? false,
+      category: task?.category || "entertainment",
       dueDate: "",
-      recurrenceType: "daily",
       startDate: "",
+      recurrenceType: task?.recurrenceType || "daily",
     },
   });
 
   const { mutate: createTask, isPending } = useMutation({
     mutationFn: http.todos.todoControllerCreate,
   });
+  const { mutate: updateTask } = useMutation({
+    mutationFn: (updatedTask: CreateTaskDto) =>
+      http.todos.todoControllerUpdate(task?.id, updatedTask),
+  });
 
   const handleSubmit = () => {
-    createTask(form.values, {
-      onSuccess: () => {
-        notifications.show({ message: "Task created successfully" });
-      },
-    });
+    if (task) {
+      updateTask(form.values, {
+        onSuccess: () => {
+          notifications.show({ message: "Task updated successfully" });
+          closeModal();
+        },
+      });
+    } else {
+      createTask(form.values, {
+        onSuccess: () => {
+          notifications.show({ message: "Task created successfully" });
+        },
+      });
+    }
   };
 
   return (
     <Center h={"100vh"} bg={"#E9ECEF"}>
       <Stack>
         <Title size="xl" ta={"center"}>
-          Create Your To-Do
+          {isUpdate ? "Update Your To-Do" : "Create Your To-Do"}
         </Title>
         <Text size="sm" color="dimmed" ta="center">
           Stay organized and productive! Add your tasks below and start checking
@@ -115,7 +136,7 @@ const CreateTask = () => {
               />
 
               <Button type="submit" mt="md" fullWidth loading={isPending}>
-                Create Task
+                {isUpdate ? "Update" : "Create"}
               </Button>
             </Stack>
           </form>
