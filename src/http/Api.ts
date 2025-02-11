@@ -51,19 +51,150 @@ export interface ResetPasswordDto {
   otp: number;
 }
 
-import type {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  HeadersDefaults,
-  ResponseType,
-} from "axios";
+export interface CreateTaskDto {
+  /** Title of the task */
+  title: string;
+  /** Detailed description of the task */
+  description?: string;
+  /**
+   * Priority level of the task
+   * @default "medium"
+   */
+  priority: "low" | "medium" | "high";
+  /**
+   * Deadline for the task
+   * @format date-time
+   */
+  dueDate?: string;
+  /**
+   * Start date of the task
+   * @format date-time
+   */
+  startDate?: string;
+  /**
+   * Whether the task is recurring
+   * @default false
+   */
+  isRecurring: boolean;
+  /** Recurrence type for the task */
+  recurrenceType?: "daily" | "weekly" | "monthly" | "yearly";
+  /** Category of the task */
+  category?:
+    | "work"
+    | "personal"
+    | "study"
+    | "fitness"
+    | "shopping"
+    | "health"
+    | "finance"
+    | "travel"
+    | "entertainment"
+    | "household"
+    | "social"
+    | "project"
+    | "urgent"
+    | "other";
+  /** Additional notes for the task */
+  notes?: string;
+}
+
+export interface Task {
+  /** @format date-time */
+  createdAt: string;
+  /** @format date-time */
+  updatedAt: string;
+  id: string;
+  /** Title of the task */
+  title: string;
+  /** Detailed description of the task */
+  description?: string;
+  /**
+   * Deadline for the task
+   * @format date-time
+   */
+  dueDate?: string;
+  /**
+   * Start date of the task
+   * @format date-time
+   */
+  startDate?: string;
+  /**
+   * Completion timestamp of the task
+   * @format date-time
+   */
+  completedAt?: string;
+  /**
+   * Whether the task is recurring
+   * @default false
+   */
+  isRecurring: boolean;
+  /** Category of the task */
+  category?:
+    | "work"
+    | "personal"
+    | "study"
+    | "fitness"
+    | "shopping"
+    | "health"
+    | "finance"
+    | "travel"
+    | "entertainment"
+    | "household"
+    | "social"
+    | "project"
+    | "urgent"
+    | "other";
+  /** Additional notes for the task */
+  notes?: string;
+}
+
+export interface UpdateTaskDto {
+  /** Title of the task */
+  title?: string;
+  /** Detailed description of the task */
+  description?: string;
+  /** Priority level of the task */
+  priority?: "low" | "medium" | "high";
+  /**
+   * Deadline for the task
+   * @format date-time
+   */
+  dueDate?: string;
+  /**
+   * Start date of the task
+   * @format date-time
+   */
+  startDate?: string;
+  /** Whether the task is recurring */
+  isRecurring?: boolean;
+  /** Recurrence type for the task */
+  recurrenceType?: "daily" | "weekly" | "monthly" | "yearly";
+  /** Category of the task */
+  category?:
+    | "work"
+    | "personal"
+    | "study"
+    | "fitness"
+    | "shopping"
+    | "health"
+    | "finance"
+    | "travel"
+    | "entertainment"
+    | "household"
+    | "social"
+    | "project"
+    | "urgent"
+    | "other";
+  /** Additional notes for the task */
+  notes?: string;
+}
+
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
 
 export type QueryParamsType = Record<string | number, any>;
 
-export interface FullRequestParams
-  extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
+export interface FullRequestParams extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -78,15 +209,11 @@ export interface FullRequestParams
   body?: unknown;
 }
 
-export type RequestParams = Omit<
-  FullRequestParams,
-  "body" | "method" | "query" | "path"
->;
+export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">;
 
-export interface ApiConfig<SecurityDataType = unknown>
-  extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
+export interface ApiConfig<SecurityDataType = unknown> extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
   securityWorker?: (
-    securityData: SecurityDataType | null
+    securityData: SecurityDataType | null,
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
   secure?: boolean;
   format?: ResponseType;
@@ -106,16 +233,8 @@ export class HttpClient<SecurityDataType = unknown> {
   private secure?: boolean;
   private format?: ResponseType;
 
-  constructor({
-    securityWorker,
-    secure,
-    format,
-    ...axiosConfig
-  }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = axios.create({
-      ...axiosConfig,
-      baseURL: axiosConfig.baseURL || "",
-    });
+  constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
+    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "" });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;
@@ -125,10 +244,7 @@ export class HttpClient<SecurityDataType = unknown> {
     this.securityData = data;
   };
 
-  protected mergeRequestParams(
-    params1: AxiosRequestConfig,
-    params2?: AxiosRequestConfig
-  ): AxiosRequestConfig {
+  protected mergeRequestParams(params1: AxiosRequestConfig, params2?: AxiosRequestConfig): AxiosRequestConfig {
     const method = params1.method || (params2 && params2.method);
 
     return {
@@ -136,11 +252,7 @@ export class HttpClient<SecurityDataType = unknown> {
       ...params1,
       ...(params2 || {}),
       headers: {
-        ...((method &&
-          this.instance.defaults.headers[
-            method.toLowerCase() as keyof HeadersDefaults
-          ]) ||
-          {}),
+        ...((method && this.instance.defaults.headers[method.toLowerCase() as keyof HeadersDefaults]) || {}),
         ...(params1.headers || {}),
         ...((params2 && params2.headers) || {}),
       },
@@ -161,15 +273,11 @@ export class HttpClient<SecurityDataType = unknown> {
     }
     return Object.keys(input || {}).reduce((formData, key) => {
       const property = input[key];
-      const propertyContent: any[] =
-        property instanceof Array ? property : [property];
+      const propertyContent: any[] = property instanceof Array ? property : [property];
 
       for (const formItem of propertyContent) {
         const isFileType = formItem instanceof Blob || formItem instanceof File;
-        formData.append(
-          key,
-          isFileType ? formItem : this.stringifyFormItem(formItem)
-        );
+        formData.append(key, isFileType ? formItem : this.stringifyFormItem(formItem));
       }
 
       return formData;
@@ -193,21 +301,11 @@ export class HttpClient<SecurityDataType = unknown> {
     const requestParams = this.mergeRequestParams(params, secureParams);
     const responseFormat = format || this.format || undefined;
 
-    if (
-      type === ContentType.FormData &&
-      body &&
-      body !== null &&
-      typeof body === "object"
-    ) {
+    if (type === ContentType.FormData && body && body !== null && typeof body === "object") {
       body = this.createFormData(body as Record<string, unknown>);
     }
 
-    if (
-      type === ContentType.Text &&
-      body &&
-      body !== null &&
-      typeof body !== "string"
-    ) {
+    if (type === ContentType.Text && body && body !== null && typeof body !== "string") {
       body = JSON.stringify(body);
     }
 
@@ -226,38 +324,36 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title Stay
+ * @title TN Nest App
  * @version 1.0.0
  * @contact
  */
-export class Api<
-  SecurityDataType extends unknown
-> extends HttpClient<SecurityDataType> {
-  api = {
-    /**
-     * No description
-     *
-     * @tags App
-     * @name AppControllerGetHello
-     * @request GET:/api
-     */
-    appControllerGetHello: (params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/api`,
-        method: "GET",
-        ...params,
-      }),
+export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags App
+   * @name AppControllerGetHello
+   * @request GET:/
+   */
+  appControllerGetHello = (params: RequestParams = {}) =>
+    this.request<void, any>({
+      path: `/`,
+      method: "GET",
+      ...params,
+    });
 
+  users = {
     /**
      * No description
      *
      * @tags User
      * @name UserControllerSignUp
-     * @request POST:/api/users/signUp
+     * @request POST:/users/signUp
      */
     userControllerSignUp: (data: SignUpDto, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/api/users/signUp`,
+        path: `/users/signUp`,
         method: "POST",
         body: data,
         type: ContentType.Json,
@@ -269,11 +365,11 @@ export class Api<
      *
      * @tags User
      * @name UserControllerSignIn
-     * @request POST:/api/users/sign-in
+     * @request POST:/users/sign-in
      */
     userControllerSignIn: (data: SignInDto, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/api/users/sign-in`,
+        path: `/users/sign-in`,
         method: "POST",
         body: data,
         type: ContentType.Json,
@@ -285,14 +381,11 @@ export class Api<
      *
      * @tags User
      * @name UserControllerForgotPassword
-     * @request POST:/api/users/forgot-Password
+     * @request POST:/users/forgot-Password
      */
-    userControllerForgotPassword: (
-      data: ForgotPasswordDto,
-      params: RequestParams = {}
-    ) =>
+    userControllerForgotPassword: (data: ForgotPasswordDto, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/api/users/forgot-Password`,
+        path: `/users/forgot-Password`,
         method: "POST",
         body: data,
         type: ContentType.Json,
@@ -304,11 +397,11 @@ export class Api<
      *
      * @tags User
      * @name UserControllerVerifyOtp
-     * @request POST:/api/users/verify-otp
+     * @request POST:/users/verify-otp
      */
     userControllerVerifyOtp: (data: VerifyOTPDto, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/api/users/verify-otp`,
+        path: `/users/verify-otp`,
         method: "POST",
         body: data,
         type: ContentType.Json,
@@ -320,14 +413,11 @@ export class Api<
      *
      * @tags User
      * @name UserControllerResetPassword
-     * @request PATCH:/api/users/reset-Password
+     * @request PATCH:/users/reset-Password
      */
-    userControllerResetPassword: (
-      data: ResetPasswordDto,
-      params: RequestParams = {}
-    ) =>
+    userControllerResetPassword: (data: ResetPasswordDto, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/api/users/reset-Password`,
+        path: `/users/reset-Password`,
         method: "PATCH",
         body: data,
         type: ContentType.Json,
@@ -339,20 +429,99 @@ export class Api<
      *
      * @tags User
      * @name UserControllerChangeAvatar
-     * @request PATCH:/api/users/change-avatar
+     * @request PATCH:/users/change-avatar
      */
     userControllerChangeAvatar: (
       data: {
         /** @format binary */
         photo?: File;
       },
-      params: RequestParams = {}
+      params: RequestParams = {},
     ) =>
       this.request<void, any>({
-        path: `/api/users/change-avatar`,
+        path: `/users/change-avatar`,
         method: "PATCH",
         body: data,
         type: ContentType.FormData,
+        ...params,
+      }),
+  };
+  todos = {
+    /**
+     * No description
+     *
+     * @tags Tasks
+     * @name TodoControllerCreate
+     * @request POST:/todos
+     */
+    todoControllerCreate: (data: CreateTaskDto, params: RequestParams = {}) =>
+      this.request<Task, any>({
+        path: `/todos`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Tasks
+     * @name TodoControllerFindAll
+     * @request GET:/todos
+     */
+    todoControllerFindAll: (params: RequestParams = {}) =>
+      this.request<Task[], any>({
+        path: `/todos`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Tasks
+     * @name TodoControllerFindOne
+     * @request GET:/todos/{id}
+     */
+    todoControllerFindOne: (id: string, params: RequestParams = {}) =>
+      this.request<Task, any>({
+        path: `/todos/${id}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Tasks
+     * @name TodoControllerUpdate
+     * @request PATCH:/todos/{id}
+     */
+    todoControllerUpdate: (id: string, data: UpdateTaskDto, params: RequestParams = {}) =>
+      this.request<Task, any>({
+        path: `/todos/${id}`,
+        method: "PATCH",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Tasks
+     * @name TodoControllerDelete
+     * @request DELETE:/todos/{id}
+     */
+    todoControllerDelete: (id: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/todos/${id}`,
+        method: "DELETE",
         ...params,
       }),
   };

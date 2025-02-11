@@ -54,24 +54,24 @@ const SignIn = () => {
     validate: yupResolver(schema),
   });
 
-  const { mutate: signIn, isPending } = useMutation({
-    mutationFn: http.api.userControllerSignIn,
-    onSuccess: (data) => {
-      notifications.show({
-        title: "Success",
-        message: "Sign in successfully",
-        color: "green",
-      });
-      setAccessToken(data.data.token);
-      // setUser(data.user);
-    },
-    onError: (error: IErrorResponse) => {
-      alert(error.response?.data?.message || "Login failed. Please try again.");
-    },
-  });
+  // const { mutate: signIn, isPending } = useMutation({
+  //   mutationFn: http.api.userControllerSignIn,
+  //   onSuccess: (data) => {
+  //     notifications.show({
+  //       title: "Success",
+  //       message: "Sign in successfully",
+  //       color: "green",
+  //     });
+  //     setAccessToken(data.data.token);
+  //     // setUser(data.user);
+  //   },
+  //   onError: (error: IErrorResponse) => {
+  //     alert(error.response?.data?.message || "Login failed. Please try again.");
+  //   },
+  // });
 
   function sendForm() {
-    signIn(newForm.values);
+    // signIn(newForm.values);
   }
 
   return (
@@ -145,9 +145,9 @@ const SignIn = () => {
                       fw={500}
                       fz={17}
                       type="submit"
-                      disabled={isPending} // Disable while logging in
+                      // disabled={isPending} // Disable while logging in
                     >
-                      {isPending ? "Signing in..." : "Sign In"}
+                      {/* {isPending ? "Signing in..." : "Sign In"} */}
                     </Button>
                   </Group>
 

@@ -4,6 +4,8 @@ import ForgotPassword from "./features/auth/forgotPassword";
 import SignUp from "./features/auth/signUp";
 import VerifyOtp from "./features/auth/verifyOtp";
 import ResetPassword from "./features/auth/ressetPassword";
+import CreateTask from "./features/task/CreateTask";
+import TasksList from "./features/task/TasksList";
 
 export const router = createBrowserRouter([
   {
@@ -25,5 +27,13 @@ export const router = createBrowserRouter([
   {
     path: "reset-password",
     element: <ResetPassword />,
+  },
+  {
+    path: "tasks",
+    element: <TasksList />,
+  },
+  {
+    path: "create-task",
+    element: <CreateTask />,
   },
 ]);
