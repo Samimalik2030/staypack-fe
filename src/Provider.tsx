@@ -9,7 +9,7 @@ import { router } from "./router";
 import { AuthProvider } from "./contexts/authContext";
 
 const theme = createTheme({
-  primaryColor: "blue",
+  primaryColor: "white",
   fontFamily: "Inter, sans-serif",
   components: {
     Button: {

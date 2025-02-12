@@ -3,7 +3,6 @@ import {
   Center,
   Stack,
   TextInput,
-  PasswordInput,
   Group,
   Text,
   Paper,
@@ -11,36 +10,36 @@ import {
   Title,
   BackgroundImage,
   Container,
+  Checkbox,
+  Select,
+  Anchor,
 } from "@mantine/core";
 import { useForm, yupResolver } from "@mantine/form";
-import * as yup from "yup";
-import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-
-const SignIn = () => {
-  const schema = yup.object({
-    email: yup
-      .string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    password: yup
-      .string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
+import * as yup from "yup";
+const Request = () => {
+  const validateSchema = yup.object({
+    fullName: yup.string().required("fullName is required"),
+    email: yup.string().email().required("email is required"),
+    select: yup.string().required("select is required"),
+    dateInput: yup.string().email("dateInput is required"),
+    inputData: yup.string().email("dateInput is required"),
   });
 
-  const newForm = useForm({
+  const form = useForm({
     initialValues: {
+      fullName: "",
       email: "",
-      password: "",
+      dateInput: "",
+      inputData: "",
     },
-    validate: yupResolver(schema),
+    validate: yupResolver(validateSchema),
   });
 
-  const { mutate: signin, isPending } = useMutation({
+  const { mutate: request, isPending } = useMutation({
     mutationFn: () =>
-      axios.post("http://localhost:3000/users/sign-in", newForm.values),
+      axios.post("http://localhost:3000/users/sign-in", form.values),
     onSuccess: (data) => {
       console.log(data.data);
     },
@@ -48,74 +47,94 @@ const SignIn = () => {
       console.log(error);
     },
   });
-
   function sendForm() {
-    signin();
+    request();
   }
-
   return (
     <>
       <Container fluid px={0}>
         <BackgroundImage
           src="https://ik.imagekit.io/yzrrrgg3d/stayPack/back.png?updatedAt=1739183590617"
-          h={"100vh"}
+          h={"120vh"}
           w={"100vw"}
         >
           <Center h={"100%"}>
             <Paper w={400} p="lg" radius="md" bg={"#ae21c2"}>
-              <form onSubmit={newForm.onSubmit(sendForm)}>
-                <Stack>
+              <form onSubmit={form.onSubmit(sendForm)}>
+                <Stack gap={6}>
                   <Group justify="center">
                     <Box
-                      w={88}
-                      h={88}
+                      w={75}
+                      h={75}
                       bg={"grape"}
-                      style={{ borderRadius: "45px" }}
+                      style={{ borderRadius: "37px" }}
                     ></Box>
                   </Group>
                   <Title fw={600} fz={32} ta={"center"} c={"white"}>
                     Sign In
                   </Title>
-                  <Text fw={400} fz={21} ta={"center"} c={"white"}>
-                    Sign in If you have an account in here
-                  </Text>
+                  <TextInput
+                    data-test="Full Name"
+                    label=" Your Name"
+                    c={"white"}
+                    placeholder="Enter your Name"
+                    required
+                  />
 
-                  {/* Email Input */}
                   <TextInput
                     data-test="email"
-                    label="Your Email"
+                    label=" Your Email"
                     c={"white"}
                     placeholder="your@email.com"
                     required
-                    {...newForm.getInputProps("email")}
                   />
 
-                  {/* Password Input */}
-                  <PasswordInput
-                    data-test="password"
-                    label="Your Password"
+                  <Select
                     c={"white"}
-                    placeholder="Your password"
-                    {...newForm.getInputProps("password")}
+                    label="Your favorite library"
+                    placeholder="Pick value"
+                    data={["low", "medium", "high"]}
+                  />
+
+                  <TextInput
+                    c={"white"}
+                    label=" Input Data"
+                    placeholder="Enter Your Date input"
+                    size="md"
+                    radius={9}
+                  />
+
+                  <TextInput
+                    c={"white"}
+                    label=" Date input"
+                    placeholder="Enter Your Date input"
+                    size="md"
+                    radius={9}
+                  />
+
+                  <TextInput
+                    data-test="Password"
+                    label="Enter Your Password"
+                    c={"white"}
+                    placeholder="your@email.com"
                     required
                   />
 
-                  {/* Forgot Password */}
+                  <Checkbox c={"white"} defaultChecked label="false" />
+
                   <Group justify="flex-end">
-                    <Text
+                    <Anchor
                       data-test="forgot-password-link"
-                      component={Link}
-                      to="/forgot-password"
                       size="sm"
                       c="white"
                     >
                       Forgot password?
-                    </Text>
+                    </Anchor>
                   </Group>
 
-                  {/* Sign In Button */}
                   <Group justify="center">
                     <Button
+                      disabled={isPending}
                       w={120}
                       h={50}
                       radius={30}
@@ -124,20 +143,16 @@ const SignIn = () => {
                       fw={500}
                       fz={17}
                       type="submit"
-                      disabled={isPending} // Disable while logging in
                     >
-                      {isPending ? "Signing in..." : "Sign In"}
+                      Submit
                     </Button>
                   </Group>
 
-                  {/* Sign Up Link */}
                   <Group justify="center" wrap="wrap">
                     <Text size="sm" c={"white"} data-test="dont-have-account">
                       Don&apos;t have an account?{" "}
                       <Text
                         data-test="sign-up-link"
-                        component={Link}
-                        to="/sign-up"
                         span
                         c="blue"
                         td="underline"
@@ -155,5 +170,4 @@ const SignIn = () => {
     </>
   );
 };
-
-export default SignIn;
+export default Request;
