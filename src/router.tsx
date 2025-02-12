@@ -7,6 +7,7 @@ import ResetPassword from "./features/auth/ressetPassword";
 import Logo from "./features/auth/logo";
 import Logos from "./features/auth/logos";
 import Request from "./features/auth/request";
+import TasksList from "./features/task/TasksList";
 
 export const router = createBrowserRouter([
   {
@@ -40,5 +41,9 @@ export const router = createBrowserRouter([
   {
     path: "request",
     element: <Request />,
+  },
+  {
+    path: "tasks",
+    element: <TasksList />,
   },
 ]);

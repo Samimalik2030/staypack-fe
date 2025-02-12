@@ -15,8 +15,6 @@ import {
 import { useForm, yupResolver } from "@mantine/form";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 
 const SignIn = () => {
   const schema = yup.object({
@@ -38,19 +36,8 @@ const SignIn = () => {
     validate: yupResolver(schema),
   });
 
-  const { mutate: signin, isPending } = useMutation({
-    mutationFn: () =>
-      axios.post("http://localhost:3000/users/sign-in", newForm.values),
-    onSuccess: (data) => {
-      console.log(data.data);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-
   function sendForm() {
-    signin();
+    // signIn(newForm.values);
   }
 
   return (
@@ -124,9 +111,9 @@ const SignIn = () => {
                       fw={500}
                       fz={17}
                       type="submit"
-                      disabled={isPending} // Disable while logging in
+                      // disabled={isPending} // Disable while logging in
                     >
-                      {isPending ? "Signing in..." : "Sign In"}
+                      {/* {isPending ? "Signing in..." : "Sign In"} */}
                     </Button>
                   </Group>
 
