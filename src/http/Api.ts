@@ -192,6 +192,36 @@ export interface UpdateTaskDto {
   notes?: string;
 }
 
+export interface CreateStudentDTO {
+  /**
+   * @format date-time
+   * @default null
+   */
+  dateOfBirth: string;
+  /** @default null */
+  gender: "Male" | "Female";
+}
+
+export interface UpdateStudentDTO {
+  /** @default null */
+  firstName: string;
+  /** @default null */
+  lastName: string;
+  /** @default null */
+  emailName: string;
+  /** @default null */
+  phoneNumber: string;
+  /**
+   * @format date-time
+   * @default null
+   */
+  dateOfBirth: string;
+  /** @default null */
+  gender: "Male" | "Female";
+  /** @default null */
+  profilePicture: string;
+}
+
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
 
@@ -524,6 +554,81 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     todoControllerDelete: (id: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/todos/${id}`,
+        method: "DELETE",
+        ...params,
+      }),
+  };
+  student = {
+    /**
+     * No description
+     *
+     * @tags Student
+     * @name StudentControllerGetAllStudents
+     * @request GET:/student
+     */
+    studentControllerGetAllStudents: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/student`,
+        method: "GET",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Student
+     * @name StudentControllerCreate
+     * @request POST:/student
+     */
+    studentControllerCreate: (data: CreateStudentDTO, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/student`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Student
+     * @name StudentControllerFindOne
+     * @request GET:/student/{id}
+     */
+    studentControllerFindOne: (id: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/student/${id}`,
+        method: "GET",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Student
+     * @name StudentControllerUpdate
+     * @request PATCH:/student/{id}
+     */
+    studentControllerUpdate: (id: string, data: UpdateStudentDTO, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/student/${id}`,
+        method: "PATCH",
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Student
+     * @name StudentControllerDelete
+     * @request DELETE:/student/{id}
+     */
+    studentControllerDelete: (id: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/student/${id}`,
         method: "DELETE",
         ...params,
       }),

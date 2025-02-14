@@ -11,12 +11,18 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { TaskCategory, TaskPriority, TaskRecurrence } from "./types";
+import {
+  TaskCategory,
+  TaskPriority,
+  TaskRecurrence,
+  UpdateFormValues,
+} from "./types";
 import { DateTimePicker } from "@mantine/dates";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "../../http";
-import { CreateTaskDto, Task } from "../../http/api";
+import { CreateTaskDto, Task, UpdateTaskDto } from "../../http/api";
 import { notifications } from "@mantine/notifications";
+import { useNavigate } from "react-router-dom";
 const CreateTask = ({
   isUpdate,
   task,
@@ -26,7 +32,9 @@ const CreateTask = ({
   task: Task | null;
   closeModal: () => void;
 }) => {
-  const form = useForm<CreateTaskDto>({
+  const navigate = useNavigate();
+
+  const form = useForm<UpdateFormValues>({
     initialValues: {
       title: task?.title || "",
       description: task?.description || "",
@@ -34,8 +42,8 @@ const CreateTask = ({
       notes: task?.notes || "",
       isRecurring: task?.isRecurring ?? false,
       category: task?.category || "entertainment",
-      dueDate: "",
-      startDate: "",
+      dueDate: task?.dueDate ? new Date(task.dueDate) : "",
+      startDate: task?.startDate ? new Date(task.startDate) : "",
       recurrenceType: task?.recurrenceType || "daily",
     },
   });
@@ -43,8 +51,9 @@ const CreateTask = ({
   const { mutate: createTask, isPending } = useMutation({
     mutationFn: http.todos.todoControllerCreate,
   });
+  const QueryClient = useQueryClient();
   const { mutate: updateTask } = useMutation({
-    mutationFn: (updatedTask: CreateTaskDto) =>
+    mutationFn: (updatedTask: UpdateTaskDto) =>
       http.todos.todoControllerUpdate(task?.id, updatedTask),
   });
 
@@ -53,6 +62,7 @@ const CreateTask = ({
       updateTask(form.values, {
         onSuccess: () => {
           notifications.show({ message: "Task updated successfully" });
+          QueryClient.invalidateQueries({ queryKey: "" });
           closeModal();
         },
       });
@@ -60,6 +70,7 @@ const CreateTask = ({
       createTask(form.values, {
         onSuccess: () => {
           notifications.show({ message: "Task created successfully" });
+          navigate("/tasks");
         },
       });
     }

@@ -3,20 +3,25 @@ import {
   Center,
   Stack,
   TextInput,
-  PasswordInput,
-  Group,
   Text,
-  Paper,
   Box,
   Title,
-  BackgroundImage,
+  Image,
   Container,
+  Card,
+  Flex,
+  Group,
+  Anchor,
 } from "@mantine/core";
 import { useForm, yupResolver } from "@mantine/form";
 import * as yup from "yup";
-import { Link } from "react-router-dom";
+import { useMediaQuery } from "@mantine/hooks";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
+  const isMobile = useMediaQuery("(max-width: 56.25em)");
+  const navigate = useNavigate();
+
   const schema = yup.object({
     email: yup
       .string()
@@ -28,7 +33,7 @@ const SignIn = () => {
       .required("Password is required"),
   });
 
-  const newForm = useForm({
+  const form = useForm({
     initialValues: {
       email: "",
       password: "",
@@ -42,102 +47,84 @@ const SignIn = () => {
 
   return (
     <>
-      <Container fluid px={0}>
-        <BackgroundImage
-          src="https://ik.imagekit.io/yzrrrgg3d/stayPack/back.png?updatedAt=1739183590617"
-          h={"100vh"}
-          w={"100vw"}
-        >
-          <Center h={"100%"}>
-            <Paper w={400} p="lg" radius="md" bg={"#ae21c2"}>
-              <form onSubmit={newForm.onSubmit(sendForm)}>
-                <Stack>
-                  <Group justify="center">
-                    <Box
-                      w={88}
-                      h={88}
-                      bg={"grape"}
-                      style={{ borderRadius: "45px" }}
-                    ></Box>
-                  </Group>
-                  <Title fw={600} fz={32} ta={"center"} c={"white"}>
-                    Sign In
-                  </Title>
-                  <Text fw={400} fz={21} ta={"center"} c={"white"}>
-                    Sign in If you have an account in here
-                  </Text>
-
-                  {/* Email Input */}
-                  <TextInput
-                    data-test="email"
-                    label="Your Email"
-                    c={"white"}
-                    placeholder="your@email.com"
-                    required
-                    {...newForm.getInputProps("email")}
-                  />
-
-                  {/* Password Input */}
-                  <PasswordInput
-                    data-test="password"
-                    label="Your Password"
-                    c={"white"}
-                    placeholder="Your password"
-                    {...newForm.getInputProps("password")}
-                    required
-                  />
-
-                  {/* Forgot Password */}
-                  <Group justify="flex-end">
-                    <Text
-                      data-test="forgot-password-link"
-                      component={Link}
-                      to="/forgot-password"
-                      size="sm"
-                      c="white"
-                    >
-                      Forgot password?
-                    </Text>
-                  </Group>
-
-                  {/* Sign In Button */}
-                  <Group justify="center">
-                    <Button
-                      w={120}
-                      h={50}
-                      radius={30}
-                      bg={"white"}
-                      c={"#afafb1ff"}
-                      fw={500}
-                      fz={17}
-                      type="submit"
-                      // disabled={isPending} // Disable while logging in
-                    >
-                      {/* {isPending ? "Signing in..." : "Sign In"} */}
-                    </Button>
-                  </Group>
-
-                  {/* Sign Up Link */}
-                  <Group justify="center" wrap="wrap">
-                    <Text size="sm" c={"white"} data-test="dont-have-account">
-                      Don&apos;t have an account?{" "}
-                      <Text
-                        data-test="sign-up-link"
-                        component={Link}
-                        to="/sign-up"
-                        span
-                        c="blue"
-                        td="underline"
-                      >
-                        Sign up Now!
+      <Container fluid h={"100vh"} w={"100vw"}>
+        <Flex h={"100vh"}>
+          <Card w={"50%"} display={isMobile ? "none" : "block"}>
+            <Image
+              radius={20}
+              src={
+                "https://ik.imagekit.io/yzrrrgg3d/stayPack/d617ef3e-f483-4eef-a48e-d915d4dbb397.jfif?updatedAt=1739463303420"
+              }
+            />
+          </Card>
+          <Card
+            w={isMobile ? "100%" : "50%"}
+            h={"100vh"}
+            style={{
+              background: "linear-gradient(to bottom, #eaffcf, #ecfffd",
+            }}
+          >
+            <Flex justify={"end"}>
+              <Text>Don't have an account?</Text>
+              <Button variant="outline" onClick={() => navigate("/sign-up")}>
+                Sign Up
+              </Button>
+            </Flex>
+            <Center h={"100%"}>
+              <Card w={"80%"} bg={"transparent"}>
+                <Flex justify={"center"}>
+                  <Box
+                    w={75}
+                    h={50}
+                    bg={"#d9d9d9"}
+                    style={{ borderRadius: "16px" }}
+                  >
+                    <Flex justify={"center"} align={"center"} h={"100%"}>
+                      <Text fw={600} fz={16}>
+                        Logo
                       </Text>
-                    </Text>
-                  </Group>
+                    </Flex>
+                  </Box>
+                </Flex>
+                <Stack gap={8} mt={10}>
+                  <Title fw={600} fz={25} ta={"center"}>
+                    Sign <span style={{ color: "#2A8C82" }}>In</span>
+                  </Title>
+                  <Text ta={"center"} fw={400} fz={21}>
+                    Sign in If you have an account
+                  </Text>
                 </Stack>
-              </form>
-            </Paper>
-          </Center>
-        </BackgroundImage>
+                <Stack gap={13} mt={7}>
+                  <TextInput label="Full Name" placeholder="John Doe" />
+                  <TextInput
+                    label="Your Email"
+                    placeholder="johndoe@gmail.com"
+                  />
+                  <Group justify="end">
+                    <Anchor
+                      c={"#2A8C82"}
+                      onClick={() => navigate("/forgot-password")}
+                    >
+                      Forgot Password?
+                    </Anchor>
+                  </Group>
+
+                  <Button
+                    fw={600}
+                    fz={16}
+                    w={"100%"}
+                    mt={7}
+                    h={42}
+                    radius={16}
+                    bg={"#2A8C82"}
+                  >
+                    Sign In
+                  </Button>
+                </Stack>
+              </Card>
+            </Center>
+          </Card>
+        </Flex>
       </Container>
     </>
   );

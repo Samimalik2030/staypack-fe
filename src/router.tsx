@@ -8,11 +8,12 @@ import Logo from "./features/auth/logo";
 import Logos from "./features/auth/logos";
 import Request from "./features/auth/request";
 import TasksList from "./features/task/TasksList";
+import Dummy from "./features/task/dummy";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <SignIn />,
+    element: <Dummy />,
   },
   {
     path: "sign-up",
@@ -29,14 +30,6 @@ export const router = createBrowserRouter([
   {
     path: "reset-password",
     element: <ResetPassword />,
-  },
-  {
-    path: "logo",
-    element: <Logo />,
-  },
-  {
-    path: "logos",
-    element: <Logos />,
   },
   {
     path: "request",

@@ -3,19 +3,24 @@ import {
   Paper,
   Text,
   Stack,
-  Loader,
   Badge,
   Group,
   Flex,
   Modal,
+  LoadingOverlay,
+  Box,
+  Button,
 } from "@mantine/core";
 import http from "../../http";
 import { useEffect, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import CreateTask from "./CreateTask";
 import { Task } from "../../http/api";
+import { useNavigate } from "react-router-dom";
 
 const TasksList = () => {
+  const navigate = useNavigate();
+
   const [hoveredId, setHoveredId] = useState<string | null>("");
   const { isLoading, data: tasks } = useQuery({
     queryKey: ["tasks"],
@@ -30,7 +35,7 @@ const TasksList = () => {
   };
   useEffect(() => {
     if (!opened) {
-      setTask(null); // Reset task when modal closes
+      setTask(null);
     }
     console.log("compoent re rendered");
   }, [opened]);
@@ -41,10 +46,22 @@ const TasksList = () => {
         <Text size="xl" ta="center">
           Your Tasks
         </Text>
-        <Flex gap={"xl"}>
+        <Box pos="relative">
+          <LoadingOverlay
+            visible={isLoading}
+            loaderProps={{ children: "Loading..." }}
+          />
+          {/* ...other content */}
+        </Box>
+
+        <Group justify="end">
+          <Button onClick={() => navigate("/create-task")}>Create new</Button>
+        </Group>
+        <Flex gap={"xl"} wrap={"wrap"}>
           {tasks?.data?.length > 0 ? (
             tasks?.data?.map((task) => (
               <Paper
+                miw={300}
                 key={task.id}
                 p="md"
                 radius="md"
@@ -56,6 +73,7 @@ const TasksList = () => {
                     hoveredId === task.id
                       ? "0px 10px 20px rgba(0, 0, 0, 0.3)"
                       : "none",
+                  cursor: hoveredId === task.id ? "pointer" : "default",
                 }}
                 onMouseEnter={() => setHoveredId(task.id)}
                 onMouseLeave={() => setHoveredId(null)}
@@ -71,11 +89,14 @@ const TasksList = () => {
                   {task.description}
                 </Text>
                 <Text size="xs" color="dimmed" mt="xs">
-                  Category: {task.category} | Status: {task.status}
+                  Category: {task.category}
                 </Text>
                 <Text size="xs" color="dimmed" mt="xs">
-                  Due: {task.dueDate}
+                  Due: 12 july 2024
                 </Text>
+                <Group justify="end">
+                  <Badge>{task.status}</Badge>
+                </Group>
               </Paper>
             ))
           ) : (

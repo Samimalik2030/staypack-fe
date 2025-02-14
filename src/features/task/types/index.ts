@@ -34,3 +34,29 @@ export enum TaskCategory {
   URGENT = "urgent",
   OTHER = "other",
 }
+
+export interface UpdateFormValues {
+  title?: string;
+  description?: string;
+  priority?: "low" | "medium" | "high";
+  dueDate?: Date | string;
+  startDate?: Date | string;
+  isRecurring?: boolean;
+  recurrenceType?: "daily" | "weekly" | "monthly" | "yearly";
+  category?:
+    | "work"
+    | "personal"
+    | "study"
+    | "fitness"
+    | "shopping"
+    | "health"
+    | "finance"
+    | "travel"
+    | "entertainment"
+    | "household"
+    | "social"
+    | "project"
+    | "urgent"
+    | "other";
+  notes?: string;
+}

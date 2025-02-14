@@ -5,7 +5,7 @@ import { IErrorResponse } from "../types/IerrorResponse";
 interface AuthContextType {
   logout: () => void;
   accessToken: string | null;
-  auth: AuthUserDto | undefined;
+  auth: AuthUser | undefined;
   isLoadingAuth: boolean;
   setAccessToken: (accessToken: string) => void;
 
@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return null;
   });
 
-  const [user, setUser] = useState<User | null>(() => {
+  const [user, setUser] = useState<IUser | null>(() => {
     if (typeof window !== "undefined") {
       const savedUser = localStorage.getItem("user");
       return savedUser ? JSON.parse(savedUser) : null;

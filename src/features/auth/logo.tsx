@@ -26,13 +26,20 @@ export default function SignIn() {
                 objectFit: "fill",
               }}
               src={
-                "https://ik.imagekit.io/yzrrrgg3d/Frame%201.png?updatedAt=1739258795564"
+                "https://ik.imagekit.io/yzrrrgg3d/stayPack/login.webp?updatedAt=1739461871318"
               }
             ></Image>
           </Card>
-          <Card bg={"#eafbe4"} w={"50%"} h={"98vh"} radius={20}>
+          <Card
+            w={"50%"}
+            h={"98vh"}
+            radius={20}
+            style={{
+              background: "linear-gradient(to bottom, #eaffcf, #ecfffd",
+            }}
+          >
             <Flex justify={"end"} align={"center"} gap={15} px={20}>
-              <Text fw={400} fz={16} c={"white"}>
+              <Text fw={400} fz={16}>
                 All ready have an account?
               </Text>
               <Button
@@ -67,7 +74,7 @@ export default function SignIn() {
                   <Title fw={600} fz={25} ta={"center"}>
                     Sign <span style={{ color: "#2A8C82" }}>Up</span>
                   </Title>
-                  <Text ta={"center"} fw={400} fz={21} c={"white"}>
+                  <Text ta={"center"} fw={400} fz={21}>
                     Sign up If you don’t have an account
                   </Text>
                 </Stack>
