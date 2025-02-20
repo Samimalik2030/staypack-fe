@@ -1,57 +1,109 @@
-import { Button, Container, Group, Stepper, Grid, Box } from "@mantine/core";
+import {
+  Button,
+  Container,
+  Group,
+  Stepper,
+  Grid,
+  Box,
+  Title,
+  Flex,
+  Anchor,
+} from "@mantine/core";
 import { useState } from "react";
-
+import IconArrowNarrowLeft from "../../../assets/icons/IconArrowNarrowLeft";
+import IconBinance from "../../../assets/icons/IconBinance";
 const StudentStepper = () => {
   const [active, setActive] = useState(1);
 
   const nextStep = () =>
-    setActive((current) => (current < 3 ? current + 1 : current));
+    setActive((current) => (current < 6 ? current + 1 : current));
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
 
   return (
-    <Container maw={1440} fluid p={"xl"}>
-      <Grid>
+    <Container fluid p={0}>
+      <Grid p={"lg"}>
         {/* Left column for Stepper */}
-        <Grid.Col span={2} style={{ borderRight: "1px solid #ddd" }}>
-          <Stepper
-            orientation="vertical"
-            active={active}
-            onStepClick={setActive}
+        <Grid.Col
+          span={3}
+          style={{ borderRadius: "12px" }}
+          bg={"#f4f4f7"}
+          h={"97vh"}
+        >
+          <Flex
+            direction={"column"}
+            h={"100%"}
+            justify={"space-between"}
+            p={"xl"}
+            align={"start"}
           >
-            <Stepper.Step
-              label="First step"
-              description="Create an account"
-            ></Stepper.Step>
-            <Stepper.Step
-              label="Second step"
-              description="Verify email"
-            ></Stepper.Step>
-            <Stepper.Step
-              label="Third step"
-              description="Fill in your profile"
-            ></Stepper.Step>
-            <Stepper.Step
-              label="Fourth step"
-              description="Add payment information"
-            ></Stepper.Step>
-            <Stepper.Step
-              label="Fifth step"
-              description="Review and confirm details"
-            ></Stepper.Step>
-            <Stepper.Step
-              label="Final step"
-              description="Get full access"
-            ></Stepper.Step>
+            <Group>
+              <IconBinance color="#2A8C82" />
+              <Title
+                c={"#2A8C82"}
+                style={{
+                  fontSize: "24px",
+                }}
+              >
+                StayPack
+              </Title>
+            </Group>
 
-            <Stepper.Completed>
-              Completed, click back button to get to previous step
-            </Stepper.Completed>
-          </Stepper>
+            <Stepper
+              color="#2A8C82"
+              orientation="vertical"
+              active={active}
+              onStepClick={setActive}
+              styles={{
+                stepIcon: {
+                  borderRadius: "8px",
+                },
+              }}
+            >
+              <Stepper.Step
+                label="First step"
+                description="Create an account"
+                icon={<IconArrowNarrowLeft size={18} />}
+              ></Stepper.Step>
+              <Stepper.Step
+                label="Second step"
+                description="Verify email"
+              ></Stepper.Step>
+              <Stepper.Step
+                label="Third step"
+                description="Fill in your profile"
+              ></Stepper.Step>
+              <Stepper.Step
+                label="Fourth step"
+                description="Add payment information"
+              ></Stepper.Step>
+              <Stepper.Step
+                label="Fifth step"
+                description="Review and confirm details"
+              ></Stepper.Step>
+              <Stepper.Step
+                label="Final step"
+                description="Get full access"
+              ></Stepper.Step>
+
+              <Stepper.Completed>
+                Completed, click back button to get to previous step
+              </Stepper.Completed>
+            </Stepper>
+            <Box h={150}></Box>
+            <Group justify="space-between" w={"100%"}>
+              <Group>
+                {/* <IconArrowNarrow color="#2A8C82" /> */}
+                <IconArrowNarrowLeft color="#2A8C82" />
+                <Anchor>Back to Home</Anchor>
+              </Group>
+              <Anchor>SignIn</Anchor>
+            </Group>
+          </Flex>
         </Grid.Col>
 
         {/* Right column for content */}
-        <Grid.Col span={10} p="lg" bg={"red"}>
+        <Grid.Col span={9} p="lg">
           <Container>
             {active === 0 && <Box>Step 1 content: Create an account</Box>}
             {active === 1 && <Box>Step 2 content: Verify email</Box>}
@@ -70,7 +122,7 @@ const StudentStepper = () => {
             <Button variant="default" onClick={prevStep}>
               Back
             </Button>
-            <Button onClick={nextStep}>Next step</Button>
+            <Button onClick={nextStep}>Next</Button>
           </Group>
         </Grid.Col>
       </Grid>

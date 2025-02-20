@@ -2,6 +2,8 @@ import { createTheme } from "@mantine/core";
 
 export const theme = createTheme({
   fontFamily: "Inter, sans-serif",
+  white: "#ffff",
+
   components: {
     Button: {
       defaultProps: {
@@ -93,6 +95,12 @@ export const theme = createTheme({
     Stack: {
       defaultProps: {
         gap: "md",
+      },
+    },
+    Anchor: {
+      defaultProps: {
+        c: "#2A8C82",
+        fw: 600,
       },
     },
   },
