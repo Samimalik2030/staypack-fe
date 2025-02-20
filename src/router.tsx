@@ -1,19 +1,18 @@
 import { createBrowserRouter } from "react-router-dom";
-import SignIn from "./features/auth/signIn";
 import ForgotPassword from "./features/auth/forgotPassword";
 import SignUp from "./features/auth/signUp";
 import VerifyOtp from "./features/auth/verifyOtp";
 import ResetPassword from "./features/auth/ressetPassword";
-import Logo from "./features/auth/logo";
-import Logos from "./features/auth/logos";
+
 import Request from "./features/auth/request";
 import TasksList from "./features/task/TasksList";
-import Dummy from "./features/task/dummy";
+import StudentStepper from "./features/stepper/student/studentStepper";
+import SignIn from "./features/auth/logo";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Dummy />,
+    element: <SignIn />,
   },
   {
     path: "sign-up",
@@ -38,5 +37,9 @@ export const router = createBrowserRouter([
   {
     path: "tasks",
     element: <TasksList />,
+  },
+  {
+    path: "student-stepper",
+    element: <StudentStepper />,
   },
 ]);
