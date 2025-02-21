@@ -8,6 +8,7 @@ import {
   Title,
   Flex,
   Anchor,
+  ScrollArea,
 } from "@mantine/core";
 import { useState } from "react";
 import IconArrowNarrowLeft from "../../../assets/icons/IconArrowNarrowLeft";
@@ -103,22 +104,26 @@ const StudentStepper = () => {
         </Grid.Col>
 
         {/* Right column for content */}
-        <Grid.Col span={9} p="lg">
-          <Container>
-            {active === 0 && <Box>Step 1 content: Create an account</Box>}
-            {active === 1 && <Box>Step 2 content: Verify email</Box>}
-            {active === 2 && <Box>Step 3 content: Fill in your profile</Box>}
-            {active === 3 && <Box>Step 4 content: Add payment information</Box>}
-            {active === 4 && (
-              <Box>Step 5 content: Review and confirm details</Box>
-            )}
-            {active === 5 && <Box>Step 6 content: Get full access</Box>}
-            {active === 6 && (
-              <Box>Completed, click back button to get to previous step</Box>
-            )}
+        <Grid.Col span={9} p="lg" h={"97vh"}>
+          <Container h={"80%"}>
+            <ScrollArea h={"100%"}>
+              {active === 0 && <Box></Box>}
+              {active === 1 && <Box>Step 2 content: Verify email</Box>}
+              {active === 2 && <Box>Step 3 content: Fill in your profile</Box>}
+              {active === 3 && (
+                <Box>Step 4 content: Add payment information</Box>
+              )}
+              {active === 4 && (
+                <Box>Step 5 content: Review and confirm details</Box>
+              )}
+              {active === 5 && <Box>Step 6 content: Get full access</Box>}
+              {active === 6 && (
+                <Box>Completed, click back button to get to previous step</Box>
+              )}
+            </ScrollArea>
           </Container>
 
-          <Group justify="end" mt="xl">
+          <Group justify="end" mt="xl" h={"18%"}>
             <Button variant="default" onClick={prevStep}>
               Back
             </Button>
