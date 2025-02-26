@@ -4,10 +4,10 @@ import SignUp from "./features/auth/signUp";
 import VerifyOtp from "./features/auth/verifyOtp";
 import ResetPassword from "./features/auth/ressetPassword";
 
-import Request from "./features/auth/request";
 import TasksList from "./features/task/TasksList";
 import StudentStepper from "./features/stepper/student/studentStepper";
-import SignIn from "./features/auth/logo";
+import SignIn from "./features/auth/signIn";
+import LandingPage from "./features/landing-page/landingPage";
 
 export const router = createBrowserRouter([
   {
@@ -30,10 +30,7 @@ export const router = createBrowserRouter([
     path: "reset-password",
     element: <ResetPassword />,
   },
-  {
-    path: "request",
-    element: <Request />,
-  },
+
   {
     path: "tasks",
     element: <TasksList />,
@@ -41,5 +38,9 @@ export const router = createBrowserRouter([
   {
     path: "student-stepper",
     element: <StudentStepper />,
+  },
+  {
+    path: "landing-page",
+    element: <LandingPage />,
   },
 ]);

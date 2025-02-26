@@ -55,8 +55,8 @@ const SignUp = () => {
 
   return (
     <>
-      <Container fluid h={"100vh"} w={"100vw"} p={10} py={0}>
-        <Flex h={"100%"}>
+      <Container fluid h={"100vh"} w={"100vw"} p={10} py={0} bg={"blue"}>
+        <Flex h={"100%"} >
           <Card p={6} w={"50%"} display={isMobile ? "none" : "block"}>
             <Image
               radius={20}
@@ -120,7 +120,7 @@ const SignUp = () => {
                     fz={9}
                     c={"#6d7572"}
                     label="Full Name"
-                    placeholder="Enter Your Email"
+                    placeholder="Enter Your Full Name "
                     size="md"
                     w={"100%"}
                     radius={16}
